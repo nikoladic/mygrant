@@ -1,0 +1,27 @@
+(ns mygrant.views.jobs
+  (:require [mygrant.views.layout :as layout]
+            [hiccup.core :refer [h]]
+            [hiccup.form :as form]
+            [ring.util.anti-forgery :as anti-forgery]))
+
+(def qualifications ["Prva" "Druga" "Treca"])
+
+(defn job-form []
+  [:div {:id "job-form" :class ""}
+   (form/form-to [:post "/"]
+                 (anti-forgery/anti-forgery-field)
+                 (form/label "qualification-label" "Choose you qualification")
+                 (form/drop-down "qualification-dd" qualifications)
+                 (form/submit-button "Get Jobs!"))])
+
+(defn display-jobs [jobs]
+  [:div {:class "jobs"}
+   (map
+    (fn [job] [:div {:class "container-jobs"} [:a {:href (str "https://poslovi.infostud.com" (:href job))}  [:h2 {:class "job-headline"} (h (:headline job))]] [:p {:class "job-snippet"} (h (:body job))]])
+    jobs)])
+
+(defn index [jobs]
+  (layout/common "MyGrant"
+                 (job-form)
+                 [:div {:class "clear"}]
+                 (display-jobs jobs)))
