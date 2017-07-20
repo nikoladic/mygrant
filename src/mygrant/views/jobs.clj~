@@ -17,7 +17,7 @@
 (defn display-jobs [jobs]
   [:div {:class "jobs"}
    (map
-    (fn [job] [:div {:class "container-jobs"} [:a {:href (h (:url job))} [:h2 {:class "job-headline"} (h (:headline job))]] [:p {:class "job-snippet"} (h (:body job))]])
+    (fn [job] [:div {:class "container-jobs"} [:a {:href (str "https://poslovi.infostud.com" (:href job))}  [:h2 {:class "job-headline"} (h (:headline job))]] [:p {:class "job-snippet"} (h (:body job))]])
     jobs)])
 
 (defn index [jobs]

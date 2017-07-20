@@ -1,0 +1,17 @@
+(ns mygrant.models.job
+  (require [reaver :refer [parse extract-from text attr]]))
+
+(defn all []
+  ["Job1" "Job2" "Job3"])
+
+(def source-website (slurp "https://www.halooglasi.com/posao/ponuda-poslova-ugostiteljstvo-i-turizam"))
+
+(defn find-job
+  "Scrapes job listings from websites and returns them as a map"
+  []
+  (extract-from (parse source-website) ".courses-title .course-description"
+              [:headline :body :href]
+              "div > .courses-title" text
+              "p.course-description" text
+              ".courses-title > a" (attr :href)))
+
