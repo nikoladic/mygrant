@@ -1,14 +1,13 @@
 # mygrant
 
-A Clojure library designed to ... well, that part is up to you.
+A Clojure web app designed to help migrants find jobs.
 
 ## Usage
 
-FIXME
+Used by migrants to get a raw description of possible jobs they might work at.
 
 ## License
 
-Copyright © 2017 FIXME
+Copyright © 2017 Jovan Toroman
 
-Distributed under the Eclipse Public License either version 1.0 or (at
-your option) any later version.
+Distributed under the Eclipse Public License either version 1.0.
