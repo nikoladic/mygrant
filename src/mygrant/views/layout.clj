@@ -9,11 +9,13 @@
     [:meta {:name "viewport" :content
             "width=device-width, initial-scale=1, maximum-scale=1"}]
     [:title title]
+    (h/include-css "stylesheets/bootstrap-3.3.7-dist/css/bootstrap.min.css")
     (h/include-css "stylesheets/style.css")]
    [:body
-    [:div {:id "header"}
-     [:h1 {:class "container"} "MyGrant"]]
-    [:div {:id "content" :class "container"} body]]))
+    [:div {:id "header" :class "page-header margin-basic"}
+     [:h1 {:id "main-title" :class "col-lg-12"} "MyGrant"]
+     [:h5 {:id "subtitle" :class "col-lg-12"} "What are you good for?"]]
+    [:div {:id "content" :class "container-fluid"} body]]))
 
 (defn four-oh-four []
   (common "Page Not Found"

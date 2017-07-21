@@ -6,14 +6,12 @@
             [mygrant.models.job :as model]))
 
 (defn index []
-  (view/index (model/find-job)))
+  (view/index [] {:qualification "ميلمه پالنه" :city "بلګراد - Beograd"}))
 
 (defn find-job
-  [qualification]
-  (when-not (str/blank? qualification)
-    (model/find-job))
-  (ring/redirect "/"))
+  [qualification city]
+  (view/index (model/find-job qualification city) {:qualification qualification :city city}))
 
 (defroutes routes
   (GET  "/" [] (index))
-  (POST "/" [qualification-dd] (find-job qualification-dd)))
+  (POST "/" [qualification-dd city-dd] (find-job qualification-dd city-dd)))
