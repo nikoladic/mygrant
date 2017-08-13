@@ -1,5 +1,8 @@
 (ns mygrant.models.job
-  (require [reaver :refer [parse extract-from text attr]]))
+  (:require [reaver :refer [parse extract-from text attr]]
+            [clj-http.client :as client]
+            [mygrant.util.util :as util]
+            [clojure.string :as str]))
 
 (defn all []
   ["Job1" "Job2" "Job3"])
@@ -10,10 +13,16 @@
 
 (def city-to-url {(keyword "بلګراد - Beograd") "ls=35112" (keyword "Novi Sad") "ls=35194" (keyword "Stara Pazova") "ls=35237" (keyword "Subotica") "ls=35240" (keyword "Zrenjanin") "ls=35277" (keyword "Surcin") "ls=35407" (keyword "په بهر کې") "ls=35408"})
 
+
+
 (defn get-source-website-data
   "Adds url parts based on parameters"
   [qualification city]
   (slurp (str "https://www.halooglasi.com/posao/ponuda-poslova-" ((keyword qualification) job-type-to-url) "?gradovi_id_" ((keyword city) city-to-url))))
+
+(defn get-translate-webpage-data
+  [text source target]
+  (client/get (str "https://translate.googleapis.com/translate_a/single?client=gtx&sl=" source "&tl=" target "&dt=t&q=" (util/url-encode text)) {:client-params {"http,useragent" "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36"}}))
 
 (defn find-job-part-one
   "Scrapes job listings from websites and returns them as a map"
@@ -24,10 +33,26 @@
               ".course-description" text
               ".courses-title > a" (attr :href)))
 
-(defn add-hostname-to-urls
+(defn translate
+  "Translates text based on input parameters for source and destination languages"
+  [text source target]
+  (if (nil? text) (str "") (get (str/split (:body (get-translate-webpage-data text source target)) #"\"") 1)))
+
+(defn translate-to-pashto-and-add-hostname-to-urls
+  "Translates job names and descriptions to pashto language"
   [jobs]
-  (map (fn [job] {:headline (:headline job) :body (:body job) :url (str get-source-website-hostname (:url job))}) jobs))
+  (map (fn [job] {:headline (translate (:headline job) "auto" "ps") :body (translate (:body job) "auto" "ps") :url (str get-source-website-hostname (:url job))}) jobs))
+
+(defn translate-to-pashto-and-add-hostname-to-urls-print
+  "Translates job names and descriptions to pashto language"
+  [jobs]
+  (map (fn [job] (println {(keyword "headline") (:headline job) (keyword "body") (:body job) :url (str get-source-website-hostname (:url job))})) jobs)
+  )
+
+(defn jobs-print
+  [jobs]
+  (map (fn [job] (println job)) jobs))
 
 (defn find-job
   [qualification city]
-  (add-hostname-to-urls (find-job-part-one qualification city)))
+  (translate-to-pashto-and-add-hostname-to-urls (find-job-part-one qualification city)))

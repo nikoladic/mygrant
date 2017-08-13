@@ -10,7 +10,9 @@
                  [hiccup "1.0.5"]
                  [reaver "0.1.2"]
                  [enlive "1.1.6"]
-                 [http-kit "2.1.18"]]
+                 [http-kit "2.1.18"]
+                 [org.clojure/data.json "0.2.6"]
+                 [clj-http "3.6.1"]]
   :main ^:skip-aot job.web
   :uberjar-name "shouter-standalone.jar"
   :plugins [[lein-ring "0.8.13"]]
